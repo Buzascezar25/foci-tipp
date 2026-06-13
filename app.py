@@ -66,8 +66,8 @@ def pont_szamit(valos_h, valos_v, tipp_h, tipp_v):
         return 1
     return 0
 
-st.set_page_config(page_title="Foci Tippjáték", layout="wide")
-st.title("Foci Tippjáték")
+st.set_page_config(page_title="Tippelde", layout="wide")
+st.title("Tippelde Fars Fcnek <3")
 
 menu = st.sidebar.radio("Navigáció", ["Ranglista és Meccsek", "Tippek leadása", "Admin Panel"])
 
