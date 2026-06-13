@@ -204,7 +204,7 @@ elif menu == "Admin Panel":
             
     st.write("---")
     
-    st.subheader("Eredmények beírása")
+    st.subheader("Eredmények beírása / Meccsek lezárása")
     if not data["meccsek"]:
         st.write("Nincsenek meccsek.")
     else:
@@ -235,3 +235,43 @@ elif menu == "Admin Panel":
                     st.success("Eredmény mentve.")
                     st.rerun()
             st.write("---")
+
+    # ==========================================
+    # BIZTONSÁGI MENTÉS ÉS VISSZAÁLLÍTÁS
+    # ==========================================
+    st.header("💾 Biztonsági mentés (Adatbázis kezelése)")
+    st.info("Mivel a rendszer felhőben fut, érdemes néha letölteni az adatokat. Ha bármi hiba történik vagy elvesznek a tippek, az elmentett fájl feltöltésével minden visszaállítható!")
+    
+    col_export, col_import = st.columns(2)
+    
+    # LETÖLTÉS (EXPORT)
+    with col_export:
+        st.subheader("Adatok letöltése")
+        try:
+            with open(DB_FILE, "r", encoding="utf-8") as f:
+                json_string = f.read()
+            
+            st.download_button(
+                label="⬇️ Adatbázis letöltése (.json)",
+                file_name="tippjatek_adatok_backup.json",
+                mime="application/json",
+                data=json_string,
+                type="primary"
+            )
+        except Exception as e:
+            st.warning("Még nincs mentett adat.")
+
+    # FELTÖLTÉS (IMPORT)
+    with col_import:
+        st.subheader("Adatok visszaállítása")
+        uploaded_file = st.file_uploader("Válassz ki egy korábban letöltött fájlt", type=["json"])
+        
+        if uploaded_file is not None:
+            if st.button("⚠️ Visszaállítás megerősítése"):
+                try:
+                    uj_adat = json.load(uploaded_file)
+                    save_data(uj_adat)
+                    st.success("Az adatbázis sikeresen visszaállítva!")
+                    st.rerun()
+                except Exception as e:
+                    st.error("Hiba történt a fájl beolvasásakor. Biztos, hogy a jó fájlt töltötted fel?")
