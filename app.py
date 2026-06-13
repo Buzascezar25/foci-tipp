@@ -110,13 +110,13 @@ if menu == "Ranglista és Meccsek":
 elif menu == "Tippek leadása":
     st.header("Tippek rögzítése")
     
-    valasztott_jatekos = st.selectbox("Válaszd ki a neved:", jatekosok)
+    valasztott_jatekos = st.selectbox("Melyi Fars Fc tag vagy?", jatekosok)
     aktiv_meccsek = {m_id: m_adat for m_id, m_adat in data["meccsek"].items() if m_adat["valos_hazai"] is None}
     
     if not aktiv_meccsek:
         st.success("Jelenleg nincs tippelhető meccs (minden meccs lezárult).")
     else:
-        st.write(f"Szia {valasztott_jatekos}! Itt adhatod le a tippjeidet a még le nem játszott meccsekre:")
+        st.write(f"Szia Mr Fars {valasztott_jatekos}! Itt adhatod le a tippjeidet a még le nem játszott meccsekre:")
         
         # MENTÉS GOMB A TETEJÉN
         if st.button("Tippek mentése", type="primary"):
@@ -157,7 +157,7 @@ elif menu == "Tippek leadása":
                     value=int(korabbi_tipp[1]), 
                     key=f"t_v_{valasztott_jatekos}_{m_id}"
                 )
-                
+
 # 3. ADMIN PANEL
 elif menu == "Admin Panel":
     st.header("Adminisztrációs felület")
