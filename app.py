@@ -9,9 +9,9 @@ DB_FILE = "tippjatek_adatok.json"
 ALAP_MECCSEK = [
     # 1. Forduló
     "Mexikó - Dél-afrika", "Dél-korea - Csehország", "Kanada - Bih", "USA - Paraguay",
-    "Katar - Svájc", "Brazil - Marokkó", "Anglia - Ausztrália", "Németország - Ghana",
-    "Spanyolország - Kolumbia", "Franciaország - Japán", "Argentína - Nigéria", "Olaszország - Irán",
-    "Egyiptom - Alizéria", "Honduras - Görögország", "Chile - Kamerun", "Új-zéland - Szlovákia",
+    "Katar - Svájc", "Brazil - Marokkó", "Haiti - Skócia", "Ausztrália - Török",
+    "Németország - Curacao", "Hollandia - Japán", "CIR - Ecuador", "Svéd - Tunézia",
+    "Spanyolország - Zold-foki", "Honduras - Görögország", "Chile - Kamerun", "Új-zéland - Szlovákia",
     "Elefántcsontpart - Dánia", "Portugália - Észak-korea", "Ukrajna - Kína", "Hollandia - Ausztria",
     "Szerbia - Uruguay", "Paraguay - Algéria", "Oroszország - Szaúd-arábia", "Svédország - Peru",
     
