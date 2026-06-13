@@ -6,49 +6,48 @@ import os
 DB_FILE = "tippjatek_adatok.json"
 
 #
-   # A hivatalos 2026-os világbajnokság 72 csoportmeccse
+   # A hivatalos 2026-os világbajnokság 72 csoportmeccse zászlókkal
 ALAP_MECCSEK = [
     # 1. Forduló
-    "Mexikó - Dél-Afrika", "Dél-Korea - Csehország",
-    "Kanada - Bosznia-Hercegovina", "Usa-Paraguay", "Katar - Svájc",
-    "Brazília - Marokkó", "Haiti - Skócia",
-    "USA - Paraguay", "Ausztrália - Törökország",
-    "Németország - Curaçao", "Elefántcsontpart - Ecuador",
-    "Hollandia - Japán", "Svédország - Tunézia",
-    "Belgium - Egyiptom", "Irán - Új-Zéland",
-    "Spanyolország - Zöld-foki-szigetek", "Szaúd-Arábia - Uruguay",
-    "Franciaország - Szenegál", "Irak - Norvégia",
-    "Argentína - Algéria", "Ausztria - Jordánia",
-    "Portugália - Kongói DK", "Üzbegisztán - Kolumbia",
-    "Ghána - Panama", "Anglia - Horvátország",
+    "Mexikó 🇲🇽 - Dél-Afrika 🇿🇦", "Dél-Korea 🇰🇷 - Csehország 🇨🇿",
+    "Kanada 🇨🇦 - Bosznia-Hercegovina 🇧🇦","USA 🇺🇸 - Paraguay 🇵🇾", "Katar 🇶🇦 - Svájc 🇨🇭",
+    "Brazília 🇧🇷 - Marokkó 🇲🇦", "Haiti 🇭🇹 - Skócia 🏴󠁧󠁢󠁳󠁣󠁴󠁿","Ausztrália 🇦🇺 - Törökország 🇹🇷",
+    "Németország 🇩🇪 - Curaçao 🇨🇼", "Elefántcsontpart 🇨🇮 - Ecuador 🇪🇨",
+    "Hollandia 🇳🇱 - Japán 🇯🇵", "Svédország 🇸🇪 - Tunézia 🇹🇳",
+    "Belgium 🇧🇪 - Egyiptom 🇪🇬", "Irán 🇮🇷 - Új-Zéland 🇳🇿",
+    "Spanyolország 🇪🇸 - Zöld-foki-szigetek 🇨🇻", "Szaúd-Arábia 🇸🇦 - Uruguay 🇺🇾",
+    "Franciaország 🇫🇷 - Szenegál 🇸🇳", "Irak 🇮🇶 - Norvégia 🇳🇴",
+    "Argentína 🇦🇷 - Algéria 🇩🇿", "Ausztria 🇦🇹 - Jordánia 🇯🇴",
+    "Portugália 🇵🇹 - Kongói DK 🇨🇩", "Üzbegisztán 🇺🇿 - Kolumbia 🇨🇴",
+    "Ghána 🇬🇭 - Panama 🇵🇦", "Anglia 🏴󠁧󠁢󠁥󠁮󠁧󠁿 - Horvátország 🇭🇷",
 
     # 2. Forduló
-    "Csehország - Dél-Afrika", "Mexikó - Dél-Korea",
-    "Svájc - Bosznia-Hercegovina", "Kanada - Katar",
-    "Skócia - Marokkó", "Brazília - Haiti",
-    "Törökország - Paraguay", "USA - Ausztrália",
-    "Ecuador - Curaçao", "Németország - Elefántcsontpart",
-    "Tunézia - Japán", "Hollandia - Svédország",
-    "Új-Zéland - Egyiptom", "Belgium - Irán",
-    "Uruguay - Zöld-foki-szigetek", "Spanyolország - Szaúd-Arábia",
-    "Norvégia - Szenegál", "Franciaország - Irak",
-    "Jordánia - Algéria", "Argentína - Ausztria",
-    "Kolumbia - Kongói DK", "Portugália - Üzbegisztán",
-    "Horvátország - Panama", "Ghána - Anglia",
+    "Csehország 🇨🇿 - Dél-Afrika 🇿🇦", "Mexikó 🇲🇽 - Dél-Korea 🇰🇷",
+    "Svájc 🇨🇭 - Bosznia-Hercegovina 🇧🇦", "Kanada 🇨🇦 - Katar 🇶🇦",
+    "Skócia 🏴󠁧󠁢󠁳󠁣󠁴󠁿 - Marokkó 🇲🇦", "Brazília 🇧🇷 - Haiti 🇭🇹",
+    "Törökország 🇹🇷 - Paraguay 🇵🇾", "USA 🇺🇸 - Ausztrália 🇦🇺",
+    "Ecuador 🇪🇨 - Curaçao 🇨🇼", "Németország 🇩🇪 - Elefántcsontpart 🇨🇮",
+    "Tunézia 🇹🇳 - Japán 🇯🇵", "Hollandia 🇳🇱 - Svédország 🇸🇪",
+    "Új-Zéland 🇳🇿 - Egyiptom 🇪🇬", "Belgium 🇧🇪 - Irán 🇮🇷",
+    "Uruguay 🇺🇾 - Zöld-foki-szigetek 🇨🇻", "Spanyolország 🇪🇸 - Szaúd-Arábia 🇸🇦",
+    "Norvégia 🇳🇴 - Szenegál 🇸🇳", "Franciaország 🇫🇷 - Irak 🇮🇶",
+    "Jordánia 🇯🇴 - Algéria 🇩🇿", "Argentína 🇦🇷 - Ausztria 🇦🇹",
+    "Kolumbia 🇨🇴 - Kongói DK 🇨🇩", "Portugália 🇵🇹 - Üzbegisztán 🇺🇿",
+    "Horvátország 🇭🇷 - Panama 🇵🇦", "Ghána 🇬🇭 - Anglia 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
 
     # 3. Forduló
-    "Csehország - Mexikó", "Dél-Afrika - Dél-Korea",
-    "Svájc - Kanada", "Bosznia-Hercegovina - Katar",
-    "Skócia - Brazília", "Marokkó - Haiti",
-    "Törökország - USA", "Paraguay - Ausztrália",
-    "Ecuador - Németország", "Curaçao - Elefántcsontpart",
-    "Tunézia - Hollandia", "Japán - Svédország",
-    "Új-Zéland - Belgium", "Egyiptom - Irán",
-    "Uruguay - Spanyolország", "Zöld-foki-szigetek - Szaúd-Arábia",
-    "Norvégia - Franciaország", "Szenegál - Irak",
-    "Jordánia - Argentína", "Algéria - Ausztria",
-    "Kolumbia - Portugália", "Kongói DK - Üzbegisztán",
-    "Horvátország - Ghána", "Panama - Anglia"
+    "Csehország 🇨🇿 - Mexikó 🇲🇽", "Dél-Afrika 🇿🇦 - Dél-Korea 🇰🇷",
+    "Svájc 🇨🇭 - Kanada 🇨🇦", "Bosznia-Hercegovina 🇧🇦 - Katar 🇶🇦",
+    "Skócia 🏴󠁧󠁢󠁳󠁣󠁴󠁿 - Brazília 🇧🇷", "Marokkó 🇲🇦 - Haiti 🇭🇹",
+    "Törökország 🇹🇷 - USA 🇺🇸", "Paraguay 🇵🇾 - Ausztrália 🇦🇺",
+    "Ecuador 🇪🇨 - Németország 🇩🇪", "Curaçao 🇨🇼 - Elefántcsontpart 🇨🇮",
+    "Tunézia 🇹🇳 - Hollandia 🇳🇱", "Japán 🇯🇵 - Svédország 🇸🇪",
+    "Új-Zéland 🇳🇿 - Belgium 🇧🇪", "Egyiptom 🇪🇬 - Irán 🇮🇷",
+    "Uruguay 🇺🇾 - Spanyolország 🇪🇸", "Zöld-foki-szigetek 🇨🇻 - Szaúd-Arábia 🇸🇦",
+    "Norvégia 🇳🇴 - Franciaország 🇫🇷", "Szenegál 🇸🇳 - Irak 🇮🇶",
+    "Jordánia 🇯🇴 - Argentína 🇦🇷", "Algéria 🇩🇿 - Ausztria 🇦🇹",
+    "Kolumbia 🇨🇴 - Portugália 🇵🇹", "Kongói DK 🇨🇩 - Üzbegisztán 🇺🇿",
+    "Horvátország 🇭🇷 - Ghána 🇬🇭", "Panama 🇵🇦 - Anglia 🏴󠁧󠁢󠁥󠁮󠁧󠁿"
 ]
 
 
