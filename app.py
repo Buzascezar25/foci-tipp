@@ -106,31 +106,27 @@ if menu == "Ranglista és Meccsek":
         st.header("Meccsek részletesen")
         st.dataframe(pd.DataFrame(meccs_tablazat), use_container_width=True, hide_index=True)
 
-# 2. TIPPEK LEADÁSA
+# 2. TIPPEK LEADÁSA (GOMB A TETEJÉN - JAVÍTOTT, JÁTÉKOSONKÉNTI MEZŐKKEL)
 elif menu == "Tippek leadása":
     st.header("Tippek rögzítése")
     
-    valasztott_jatekos = st.selectbox("Melyik Fars fc tag vagy ?", jatekosok)
+    valasztott_jatekos = st.selectbox("Válaszd ki a neved:", jatekosok)
     aktiv_meccsek = {m_id: m_adat for m_id, m_adat in data["meccsek"].items() if m_adat["valos_hazai"] is None}
     
     if not aktiv_meccsek:
         st.success("Jelenleg nincs tippelhető meccs (minden meccs lezárult).")
     else:
-        st.write(f"Szia Mr fars {valasztott_jatekos}! Itt adhatod le a tippjeidet a még le nem játszott meccsekre:")
+        st.write(f"Szia {valasztott_jatekos}! Itt adhatod le a tippjeidet a még le nem játszott meccsekre:")
         
-        # Ideiglenes szótár a beírt tippek összegyűjtéséhez
-        uj_tippek = {}
-        
-        # A MENTÉS GOMB MOSTANTÓL A TETEJÉN VAN
+        # MENTÉS GOMB A TETEJÉN
         if st.button("Tippek mentése", type="primary"):
             if valasztott_jatekos not in data["tippek"]:
                 data["tippek"][valasztott_jatekos] = {}
             
-            # Mivel a gomb megnyomásakor a Streamlit újraértékeli a lapot, 
-            # a lenti session_state-be rögzített aktuális értékeket mentjük el
+            # Most már a játékos-specifikus session_state kulcsokból olvassuk ki az adatot
             for m_id in aktiv_meccsek.keys():
-                h_ertek = st.session_state.get(f"t_h_{m_id}", 0)
-                v_ertek = st.session_state.get(f"t_v_{m_id}", 0)
+                h_ertek = st.session_state.get(f"t_h_{valasztott_jatekos}_{m_id}", 0)
+                v_ertek = st.session_state.get(f"t_v_{valasztott_jatekos}_{m_id}", 0)
                 data["tippek"][valasztott_jatekos][m_id] = [h_ertek, v_ertek]
             
             save_data(data)
@@ -139,19 +135,19 @@ elif menu == "Tippek leadása":
 
         st.write("---")
 
-        # Meccsek listázása a gomb alatt
         for m_id in aktiv_meccsek.keys():
             st.subheader(m_id)
             korabbi_tipp = data["tippek"].get(valasztott_jatekos, {}).get(m_id, [0, 0])
             
             col1, col2 = st.columns(2)
             with col1:
+                # A 'key' most már tartalmazza a játékos nevét is!
                 st.number_input(
                     f"Hazai tipp", 
                     min_value=0, 
                     max_value=20, 
                     value=int(korabbi_tipp[0]), 
-                    key=f"t_h_{m_id}"
+                    key=f"t_h_{valasztott_jatekos}_{m_id}"
                 )
             with col2:
                 st.number_input(
@@ -159,9 +155,9 @@ elif menu == "Tippek leadása":
                     min_value=0, 
                     max_value=20, 
                     value=int(korabbi_tipp[1]), 
-                    key=f"t_v_{m_id}"
+                    key=f"t_v_{valasztott_jatekos}_{m_id}"
                 )
-
+                
 # 3. ADMIN PANEL
 elif menu == "Admin Panel":
     st.header("Adminisztrációs felület")
@@ -188,7 +184,7 @@ elif menu == "Admin Panel":
             
     st.write("---")
     
-    st.subheader("Eredmények beírása / Meccsek lezárása")
+    st.subheader("Eredmények beírása")
     if not data["meccsek"]:
         st.write("Nincsenek meccsek.")
     else:
