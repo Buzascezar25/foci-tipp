@@ -1,8 +1,11 @@
 import streamlit as st
 import pandas as pd
-from streamlit_gsheets import GSheetsConnection
+import json
+import os
 
-# Alapértelmezett 72 meccs listája
+DB_FILE = "tippjatek_adatok.json"
+
+# A 72 csoportkör meccs pontos listája
 ALAP_MECCSEK = [
     "Mexikó - Dél-afrika", "Dél-korea - Csehország", "Kanada - Bih", "USA - Paraguay",
     "Katar - Svájc", "Brazil - Marokkó", "Anglia - Ausztrália", "Németország - Ghana",
@@ -24,44 +27,33 @@ ALAP_MECCSEK = [
     "Szerbia - Algéria", "Uruguay - Paraguay", "Oroszország - Peru", "Szaúd-arábia - Svédország"
 ]
 
-# Kapcsolat létrehozása a Google Sheets-szel (a titkos beállításokból olvassa be a linket)
-conn = st.connection("gsheets", type=GSheetsConnection)
-
-def load_data_from_sheets():
-    try:
-        df_m = conn.read(worksheet="meccsek", ttl=0)
-        # Ha a beolvasott táblázat teljesen üres vagy hibás formátumú
-        if df_m.empty or "Meccs" not in df_m.columns:
-            raise Exception("Ures")
-    except Exception:
-        df_m = pd.DataFrame([{"Meccs": m, "valos_hazai": "", "valos_vendeg": ""} for m in ALAP_MECCSEK])
-        conn.update(worksheet="meccsek", data=df_m)
+def load_data():
+    if os.path.exists(DB_FILE):
+        with open(DB_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
     
-    try:
-        df_t = conn.read(worksheet="tippek", ttl=0)
-        if df_t.empty or "Jatekos" not in df_t.columns:
-            df_t = pd.DataFrame(columns=["Jatekos", "Meccs", "tipp_hazai", "tipp_vendeg"])
-    except Exception:
-        df_t = pd.DataFrame(columns=["Jatekos", "Meccs", "tipp_hazai", "tipp_vendeg"])
-        
-    return df_m, df_t
+    alap_struktura = {"meccsek": {}, "tippek": {}}
+    for meccs in ALAP_MECCSEK:
+        alap_struktura["meccsek"][meccs] = {"valos_hazai": None, "valos_vendeg": None}
+    
+    with open(DB_FILE, "w", encoding="utf-8") as f:
+        json.dump(alap_struktura, f, ensure_ascii=False, indent=4)
+    return alap_struktura
 
-df_meccsek, df_tippek = load_data_from_sheets()
+def save_data(data):
+    with open(DB_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+data = load_data()
 jatekosok = ["Péter", "Barna", "Boldi", "Dana", "Szaba"]
 
 def pont_szamit(valos_h, valos_v, tipp_h, tipp_v):
-    try:
-        if pd.isna(valos_h) or pd.isna(valos_v) or valos_h == "" or valos_v == "":
-            return 0
-        v_h, v_v = int(valos_h), int(valos_v)
-        t_h, t_v = int(tipp_h), int(tipp_v)
-    except (ValueError, TypeError):
+    if valos_h is None or valos_v is None or tipp_h is None or tipp_v is None:
         return 0
-        
-    if v_h == t_h and v_v == t_v:
+    if valos_h == tipp_h and valos_v == tipp_v:
         return 3
-    valos_kim = 1 if v_h > v_v else (2 if v_h < v_v else 0)
-    tipp_kim = 1 if t_h > t_v else (2 if t_h < t_v else 0)
+    valos_kim = 1 if valos_h > valos_v else (2 if valos_h < valos_v else 0)
+    tipp_kim = 1 if tipp_h > tipp_v else (2 if tipp_h < tipp_v else 0)
     if valos_kim == tipp_kim:
         return 1
     return 0
@@ -71,83 +63,78 @@ st.title("Közös Foci Tippjáték")
 
 menu = st.sidebar.radio("Navigáció", ["Ranglista és Meccsek", "Tippek leadása", "Admin Panel"])
 
-# 1. RANGLISTA ÉS MECCSEK
+# 1. RANGLISTA ÉS MECCSEK MEGJELENÍTÉSE
 if menu == "Ranglista és Meccsek":
     st.header("Aktuális Állás")
     
-    osszes_pont = {j: 0 for j in jatekosok}
-    meccs_tablazat = []
-    
-    for _, m_sor in df_meccsek.iterrows():
-        m_id = m_sor["Meccs"]
-        v_h = m_sor["valos_hazai"]
-        v_v = m_sor["valos_vendeg"]
+    if not data["meccsek"]:
+        st.info("Nincsenek meccsek a rendszerben.")
+    else:
+        osszes_pont = {j: 0 for j in jatekosok}
+        meccs_tablazat = []
         
-        has_eredmeny = not pd.isna(v_h) and v_h != "" and not pd.isna(v_v) and v_v != ""
-        eredmeny_szoveg = f"{int(v_h)}-{int(v_v)}" if has_eredmeny else "Még nincs végeredmény"
-        sor = {"Meccs": m_id, "Végeredmény": eredmeny_szoveg}
+        for m_id, m_adat in data["meccsek"].items():
+            v_h, v_v = m_adat["valos_hazai"], m_adat["valos_vendeg"]
+            eredmeny_szoveg = f"{v_h}-{v_v}" if v_h is not None else "Még nincs végeredmény"
+            
+            sor = {"Meccs": m_id, "Végeredmény": eredmeny_szoveg}
+            
+            for j in jatekosok:
+                tipp = data["tippek"].get(j, {}).get(m_id, None)
+                if tipp:
+                    pont = pont_szamit(v_h, v_v, tipp[0], tipp[1])
+                    osszes_pont[j] += pont
+                    sor[f"{j} tipp"] = f"{tipp[0]}-{tipp[1]}"
+                    sor[f"{j} pont"] = pont
+                else:
+                    sor[f"{j} tipp"] = "-"
+                    sor[f"{j} pont"] = 0
+            
+            meccs_tablazat.append(sor)
+            
+        ranglista_df = pd.DataFrame(list(osszes_pont.items()), columns=["Játékos", "Összes pont"]).sort_values(by="Összes pont", ascending=False)
+        st.dataframe(ranglista_df, use_container_width=True, hide_index=True)
         
-        for j in jatekosok:
-            j_tippek = df_tippek[(df_tippek["Jatekos"] == j) & (df_tippek["Meccs"] == m_id)]
-            if not j_tippek.empty:
-                t_h = j_tippek.iloc[0]["tipp_hazai"]
-                t_v = j_tippek.iloc[0]["tipp_vendeg"]
-                pont = pont_szamit(v_h, v_v, t_h, t_v)
-                osszes_pont[j] += pont
-                sor[f"{j} tipp"] = f"{int(t_h)}-{int(t_v)}"
-                sor[f"{j} pont"] = pont
-            else:
-                sor[f"{j} tipp"] = "-"
-                sor[f"{j} pont"] = 0
-                
-        meccs_tablazat.append(sor)
-        
-    ranglista_df = pd.DataFrame(list(osszes_pont.items()), columns=["Játékos", "Összes pont"]).sort_values(by="Összes pont", ascending=False)
-    st.dataframe(ranglista_df, use_container_width=True, hide_index=True)
-    
-    st.header("Meccsek részletesen")
-    st.dataframe(pd.DataFrame(meccs_tablazat), use_container_width=True, hide_index=True)
+        st.header("Meccsek részletesen")
+        st.dataframe(pd.DataFrame(meccs_tablazat), use_container_width=True, hide_index=True)
 
-# 2. TIPPEK LEADÁSA
+# 2. TIPPEK LEADÁSA (GOMB A TETEJÉN)
 elif menu == "Tippek leadása":
     st.header("Tippek rögzítése")
+    
     valasztott_jatekos = st.selectbox("Válaszd ki a neved:", jatekosok)
+    aktiv_meccsek = {m_id: m_adat for m_id, m_adat in data["meccsek"].items() if m_adat["valos_hazai"] is None}
     
-    aktiv_meccsek = df_meccsek[df_meccsek["valos_hazai"].isna() | (df_meccsek["valos_hazai"] == "")]
-    
-    if aktiv_meccsek.empty:
-        st.success("Jelenleg nincs tippelhető meccs.")
+    if not aktiv_meccsek:
+        st.success("Jelenleg nincs tippelhető meccs (minden meccs lezárult).")
     else:
-        st.write(f"Szia {valasztott_jatekos}! Itt adhatod le a tippjeidet:")
+        st.write(f"Szia {valasztott_jatekos}! Itt adhatod le a tippjeidet a még le nem játszott meccsekre:")
         
+        # MENTÉS GOMB A TETEJÉN
         if st.button("Tippek mentése", type="primary"):
-            for _, m_sor in aktiv_meccsek.iterrows():
-                m_id = m_sor["Meccs"]
+            if valasztott_jatekos not in data["tippek"]:
+                data["tippek"][valasztott_jatekos] = {}
+            
+            for m_id in aktiv_meccsek.keys():
                 h_ertek = st.session_state.get(f"t_h_{m_id}", 0)
                 v_ertek = st.session_state.get(f"t_v_{m_id}", 0)
-                
-                df_tippek = df_tippek[~((df_tippek["Jatekos"] == valasztott_jatekos) & (df_tippek["Meccs"] == m_id))]
-                uj_sor = pd.DataFrame([{"Jatekos": valasztott_jatekos, "Meccs": m_id, "tipp_hazai": int(h_ertek), "tipp_vendeg": int(v_ertek)}])
-                df_tippek = pd.concat([df_tippek, uj_sor], ignore_index=True)
-                
-            conn.update(worksheet="tippek", data=df_tippek)
-            st.success("A tippjeidet elmentettem a Google Táblázatba.")
+                data["tippek"][valasztott_jatekos][m_id] = [h_ertek, v_ertek]
+            
+            save_data(data)
+            st.success("A tippjeidet elmentettem.")
             st.rerun()
 
         st.write("---")
 
-        for _, m_sor in aktiv_meccsek.iterrows():
-            m_id = m_sor["Meccs"]
-            korabbi = df_tippek[(df_tippek["Jatekos"] == valasztott_jatekos) & (df_tippek["Meccs"] == m_id)]
-            alap_h = korabbi.iloc[0]["tipp_hazai"] if not korabbi.empty else 0
-            alap_v = korabbi.iloc[0]["tipp_vendeg"] if not korabbi.empty else 0
-            
+        for m_id in aktiv_meccsek.keys():
             st.subheader(m_id)
+            korabbi_tipp = data["tippek"].get(valasztott_jatekos, {}).get(m_id, [0, 0])
+            
             col1, col2 = st.columns(2)
             with col1:
-                st.number_input(f"Hazai tipp", min_value=0, max_value=20, value=int(alap_h), key=f"t_h_{m_id}")
+                st.number_input(f"Hazai tipp", min_value=0, max_value=20, value=int(korabbi_tipp[0]), key=f"t_h_{m_id}")
             with col2:
-                st.number_input(f"Vendég tipp", min_value=0, max_value=20, value=int(alap_v), key=f"t_v_{m_id}")
+                st.number_input(f"Vendég tipp", min_value=0, max_value=20, value=int(korabbi_tipp[1]), key=f"t_v_{m_id}")
 
 # 3. ADMIN PANEL
 elif menu == "Admin Panel":
@@ -156,52 +143,53 @@ elif menu == "Admin Panel":
     st.subheader("Új meccs hozzáadása")
     col1, col2 = st.columns(2)
     with col1:
-        hazai_csapat = st.text_input("Hazai csapat neve:")
+        hazai_csapat = st.text_input("Hazai csapat neve:", placeholder="Pl: Brazília")
     with col2:
-        vendeg_csapat = st.text_input("Vendég csapat neve:")
+        vendeg_csapat = st.text_input("Vendég csapat neve:", placeholder="Pl: Marokkó")
         
     if st.button("Meccs létrehozása"):
         if hazai_csapat and vendeg_csapat:
             meccs_kulcs = f"{hazai_csapat} - {vendeg_csapat}"
-            if meccs_kulcs not in df_meccsek["Meccs"].values:
-                uj_meccs = pd.DataFrame([{"Meccs": meccs_kulcs, "valos_hazai": "", "valos_vendeg": ""}])
-                df_meccsek = pd.concat([df_meccsek, uj_meccs], ignore_index=True)
-                conn.update(worksheet="meccsek", data=df_meccsek)
+            if meccs_kulcs not in data["meccsek"]:
+                data["meccsek"][meccs_kulcs] = {"valos_hazai": None, "valos_vendeg": None}
+                save_data(data)
                 st.success(f"Meccs hozzáadva: {meccs_kulcs}")
                 st.rerun()
             else:
                 st.warning("Ez a meccs már létezik.")
-                
+        else:
+            st.error("Kérlek add meg mindkét csapat nevét.")
+            
     st.write("---")
     
     st.subheader("Eredmények beírása / Meccsek lezárása")
-    for index, m_sor in df_meccsek.iterrows():
-        m_id = m_sor["Meccs"]
-        v_h = m_sor["valos_hazai"]
-        v_v = m_sor["valos_vendeg"]
-        
-        st.write(f"**{m_id}**")
-        is_checked = not pd.isna(v_h) and v_h != ""
-        alap_h = v_h if is_checked else 0
-        alap_v = v_v if is_checked else 0
-        
-        lejatszott = st.checkbox("Lejátszva / Lezárva", value=is_checked, key=f"admin_ch_{index}")
-        
-        col1, col2, col3 = st.columns([2, 2, 1])
-        with col1:
-            h_gól = st.number_input("Hazai gól", min_value=0, max_value=20, value=int(alap_h), key=f"admin_h_{index}", disabled=not lejatszott)
-        with col2:
-            v_gól = st.number_input("Vendég gól", min_value=0, max_value=20, value=int(alap_v), key=f"admin_v_{index}", disabled=not lejatszott)
-        with col3:
-            st.write("")
-            if st.button("Mentés", key=f"btn_{index}"):
-                if lejatszott:
-                    df_meccsek.at[index, "valos_hazai"] = int(h_gól)
-                    df_meccsek.at[index, "valos_vendeg"] = int(v_gól)
-                else:
-                    df_meccsek.at[index, "valos_hazai"] = ""
-                    df_meccsek.at[index, "valos_vendeg"] = ""
-                conn.update(worksheet="meccsek", data=df_meccsek)
-                st.success("Eredmény mentve.")
-                st.rerun()
-        st.write("---")
+    if not data["meccsek"]:
+        st.write("Nincsenek meccsek.")
+    else:
+        for m_id, m_adat in data["meccsek"].items():
+            st.write(f"**{m_id}**")
+            
+            alap_h = 0 if m_adat["valos_hazai"] is None else m_adat["valos_hazai"]
+            alap_v = 0 if m_adat["valos_vendeg"] is None else m_adat["valos_vendeg"]
+            is_checked = m_adat["valos_hazai"] is not None
+            
+            lejatszott = st.checkbox("Lejátszva / Lezárva", value=is_checked, key=f"admin_ch_{m_id}")
+            
+            col1, col2, col3 = st.columns([2, 2, 1])
+            with col1:
+                h_gól = st.number_input("Hazai gól", min_value=0, max_value=20, value=int(alap_h), key=f"admin_h_{m_id}", disabled=not lejatszott)
+            with col2:
+                v_gól = st.number_input("Vendég gól", min_value=0, max_value=20, value=int(alap_v), key=f"admin_v_{m_id}", disabled=not lejatszott)
+            with col3:
+                st.write("")
+                if st.button("Mentés", key=f"btn_{m_id}"):
+                    if lejatszott:
+                        data["meccsek"][m_id]["valos_hazai"] = h_gól
+                        data["meccsek"][m_id]["valos_vendeg"] = v_gól
+                    else:
+                        data["meccsek"][m_id]["valos_hazai"] = None
+                        data["meccsek"][m_id]["valos_vendeg"] = None
+                    save_data(data)
+                    st.success("Eredmény mentve.")
+                    st.rerun()
+            st.write("---")
