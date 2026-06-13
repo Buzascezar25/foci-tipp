@@ -1,15 +1,6 @@
-import subprocess
-import sys
-
-# Szükséges modern Google Sheets csatlakozó telepítése automatikusan
-try:
-    from streamlit_gsheets import GSheetsConnection
-except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "st-gsheets-connection"])
-    from streamlit_gsheets import GSheetsConnection
-
 import streamlit as st
 import pandas as pd
+from streamlit_gsheets import GSheetsConnection
 
 # Alapértelmezett 72 meccs listája
 ALAP_MECCSEK = [
