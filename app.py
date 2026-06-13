@@ -239,8 +239,7 @@ elif menu == "Admin Panel":
     # ==========================================
     # BIZTONSÁGI MENTÉS ÉS VISSZAÁLLÍTÁS
     # ==========================================
-    st.header("💾 Biztonsági mentés (Adatbázis kezelése)")
-    st.info("Mivel a rendszer felhőben fut, érdemes néha letölteni az adatokat. Ha bármi hiba történik vagy elvesznek a tippek, az elmentett fájl feltöltésével minden visszaállítható!")
+    st.header(" Biztonsági mentés ")
     
     col_export, col_import = st.columns(2)
     
@@ -252,7 +251,7 @@ elif menu == "Admin Panel":
                 json_string = f.read()
             
             st.download_button(
-                label="⬇️ Adatbázis letöltése (.json)",
+                label=" Adatbázis letöltése (.json)",
                 file_name="tippjatek_adatok_backup.json",
                 mime="application/json",
                 data=json_string,
@@ -267,7 +266,7 @@ elif menu == "Admin Panel":
         uploaded_file = st.file_uploader("Válassz ki egy korábban letöltött fájlt", type=["json"])
         
         if uploaded_file is not None:
-            if st.button("⚠️ Visszaállítás megerősítése"):
+            if st.button(" Visszaállítás megerősítése"):
                 try:
                     uj_adat = json.load(uploaded_file)
                     save_data(uj_adat)
