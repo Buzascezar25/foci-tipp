@@ -5,20 +5,25 @@ import os
 
 DB_FILE = "tippjatek_adatok.json"
 
-# A 72 csoportkör meccs pontos listája
+# A képen szereplő 72 csoportkör meccs pontos időrendben rögzítve
 ALAP_MECCSEK = [
+    # 1. Forduló
     "Mexikó - Dél-afrika", "Dél-korea - Csehország", "Kanada - Bih", "USA - Paraguay",
     "Katar - Svájc", "Brazil - Marokkó", "Anglia - Ausztrália", "Németország - Ghana",
     "Spanyolország - Kolumbia", "Franciaország - Japán", "Argentína - Nigéria", "Olaszország - Irán",
     "Egyiptom - Alizéria", "Honduras - Görögország", "Chile - Kamerun", "Új-zéland - Szlovákia",
     "Elefántcsontpart - Dánia", "Portugália - Észak-korea", "Ukrajna - Kína", "Hollandia - Ausztria",
     "Szerbia - Uruguay", "Paraguay - Algéria", "Oroszország - Szaúd-arábia", "Svédország - Peru",
+    
+    # 2. Forduló
     "Mexikó - Kanada", "Dél-afrika - Bih", "Dél-korea - USA", "Csehország - Paraguay",
     "Katar - Brazil", "Svájc - Marokkó", "Anglia - Németország", "Ausztrália - Ghana",
     "Spanyolország - Franciaország", "Kolumbia - Japán", "Argentína - Olaszország", "Nigéria - Irán",
     "Egyiptom - Honduras", "Alizéria - Görögország", "Chile - Új-zéland", "Kamerun - Szlovákia",
     "Elefántcsontpart - Portugália", "Dánia - Észak-korea", "Ukrajna - Hollandia", "Kína - Ausztria",
     "Szerbia - Paraguay", "Uruguay - Algéria", "Oroszország - Svédország", "Szaúd-arábia - Peru",
+    
+    # 3. Forduló
     "Mexikó - Bih", "Dél-afrika - Kanada", "Dél-korea - Paraguay", "Csehország - USA",
     "Katar - Marokkó", "Svájc - Brazil", "Anglia - Ghana", "Ausztrália - Németország",
     "Spanyolország - Japán", "Kolumbia - Franciaország", "Argentína - Irán", "Nigéria - Olaszország",
@@ -32,12 +37,15 @@ def load_data():
         with open(DB_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
     
+    # Ha nincs még mentés, legeneráljuk az alap 72 meccset
     alap_struktura = {"meccsek": {}, "tippek": {}}
     for meccs in ALAP_MECCSEK:
         alap_struktura["meccsek"][meccs] = {"valos_hazai": None, "valos_vendeg": None}
     
+    # El is mentjük azonnal, hogy meglegyen a fájl
     with open(DB_FILE, "w", encoding="utf-8") as f:
         json.dump(alap_struktura, f, ensure_ascii=False, indent=4)
+        
     return alap_struktura
 
 def save_data(data):
@@ -59,7 +67,7 @@ def pont_szamit(valos_h, valos_v, tipp_h, tipp_v):
     return 0
 
 st.set_page_config(page_title="Foci Tippjáték", layout="wide")
-st.title("Közös Foci Tippjáték")
+st.title("Foci Tippjáték")
 
 menu = st.sidebar.radio("Navigáció", ["Ranglista és Meccsek", "Tippek leadása", "Admin Panel"])
 
@@ -98,23 +106,28 @@ if menu == "Ranglista és Meccsek":
         st.header("Meccsek részletesen")
         st.dataframe(pd.DataFrame(meccs_tablazat), use_container_width=True, hide_index=True)
 
-# 2. TIPPEK LEADÁSA (GOMB A TETEJÉN)
+# 2. TIPPEK LEADÁSA
 elif menu == "Tippek leadása":
     st.header("Tippek rögzítése")
     
-    valasztott_jatekos = st.selectbox("Melyik Fars fc tag vagy?", jatekosok)
+    valasztott_jatekos = st.selectbox("Melyik Fars fc tag vagy ?", jatekosok)
     aktiv_meccsek = {m_id: m_adat for m_id, m_adat in data["meccsek"].items() if m_adat["valos_hazai"] is None}
     
     if not aktiv_meccsek:
         st.success("Jelenleg nincs tippelhető meccs (minden meccs lezárult).")
     else:
-        st.write(f"Szia Mr Fars {valasztott_jatekos}! Itt adhatod le a tippjeidet a még le nem játszott meccsekre:")
+        st.write(f"Szia Mr fars {valasztott_jatekos}! Itt adhatod le a tippjeidet a még le nem játszott meccsekre:")
         
-        # MENTÉS GOMB A TETEJÉN
+        # Ideiglenes szótár a beírt tippek összegyűjtéséhez
+        uj_tippek = {}
+        
+        # A MENTÉS GOMB MOSTANTÓL A TETEJÉN VAN
         if st.button("Tippek mentése", type="primary"):
             if valasztott_jatekos not in data["tippek"]:
                 data["tippek"][valasztott_jatekos] = {}
             
+            # Mivel a gomb megnyomásakor a Streamlit újraértékeli a lapot, 
+            # a lenti session_state-be rögzített aktuális értékeket mentjük el
             for m_id in aktiv_meccsek.keys():
                 h_ertek = st.session_state.get(f"t_h_{m_id}", 0)
                 v_ertek = st.session_state.get(f"t_v_{m_id}", 0)
@@ -126,15 +139,28 @@ elif menu == "Tippek leadása":
 
         st.write("---")
 
+        # Meccsek listázása a gomb alatt
         for m_id in aktiv_meccsek.keys():
             st.subheader(m_id)
             korabbi_tipp = data["tippek"].get(valasztott_jatekos, {}).get(m_id, [0, 0])
             
             col1, col2 = st.columns(2)
             with col1:
-                st.number_input(f"Hazai tipp", min_value=0, max_value=20, value=int(korabbi_tipp[0]), key=f"t_h_{m_id}")
+                st.number_input(
+                    f"Hazai tipp", 
+                    min_value=0, 
+                    max_value=20, 
+                    value=int(korabbi_tipp[0]), 
+                    key=f"t_h_{m_id}"
+                )
             with col2:
-                st.number_input(f"Vendég tipp", min_value=0, max_value=20, value=int(korabbi_tipp[1]), key=f"t_v_{m_id}")
+                st.number_input(
+                    f"Vendég tipp", 
+                    min_value=0, 
+                    max_value=20, 
+                    value=int(korabbi_tipp[1]), 
+                    key=f"t_v_{m_id}"
+                )
 
 # 3. ADMIN PANEL
 elif menu == "Admin Panel":
