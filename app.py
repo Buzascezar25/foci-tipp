@@ -5,32 +5,52 @@ import os
 
 DB_FILE = "tippjatek_adatok.json"
 
-# A képen szereplő 72 csoportkör meccs pontos időrendben rögzítve
+#
+   # A hivatalos 2026-os világbajnokság 72 csoportmeccse
 ALAP_MECCSEK = [
     # 1. Forduló
-    "Mexikó - Dél-afrika", "Dél-korea - Csehország", "Kanada - Bih", "USA - Paraguay",
-    "Katar - Svájc", "Brazil - Marokkó", "Haiti - Skócia", "Ausztrália - Török",
-    "Németország - Curacao", "Hollandia - Japán", "CIR - Ecuador", "Svéd - Tunézia",
-    "Spanyolország - Zold-foki", "Honduras - Görögország", "Chile - Kamerun", "Új-zéland - Szlovákia",
-    "Elefántcsontpart - Dánia", "Portugália - Észak-korea", "Ukrajna - Kína", "Hollandia - Ausztria",
-    "Szerbia - Uruguay", "Paraguay - Algéria", "Oroszország - Szaúd-arábia", "Svédország - Peru",
-    
+    "Mexikó - Dél-Afrika", "Dél-Korea - Csehország",
+    "Kanada - Bosznia-Hercegovina", "Katar - Svájc",
+    "Brazília - Marokkó", "Haiti - Skócia",
+    "USA - Paraguay", "Ausztrália - Törökország",
+    "Németország - Curaçao", "Elefántcsontpart - Ecuador",
+    "Hollandia - Japán", "Svédország - Tunézia",
+    "Belgium - Egyiptom", "Irán - Új-Zéland",
+    "Spanyolország - Zöld-foki-szigetek", "Szaúd-Arábia - Uruguay",
+    "Franciaország - Szenegál", "Irak - Norvégia",
+    "Argentína - Algéria", "Ausztria - Jordánia",
+    "Portugália - Kongói DK", "Üzbegisztán - Kolumbia",
+    "Ghána - Panama", "Anglia - Horvátország",
+
     # 2. Forduló
-    "Mexikó - Kanada", "Dél-afrika - Bih", "Dél-korea - USA", "Csehország - Paraguay",
-    "Katar - Brazil", "Svájc - Marokkó", "Anglia - Németország", "Ausztrália - Ghana",
-    "Spanyolország - Franciaország", "Kolumbia - Japán", "Argentína - Olaszország", "Nigéria - Irán",
-    "Egyiptom - Honduras", "Alizéria - Görögország", "Chile - Új-zéland", "Kamerun - Szlovákia",
-    "Elefántcsontpart - Portugália", "Dánia - Észak-korea", "Ukrajna - Hollandia", "Kína - Ausztria",
-    "Szerbia - Paraguay", "Uruguay - Algéria", "Oroszország - Svédország", "Szaúd-arábia - Peru",
-    
+    "Csehország - Dél-Afrika", "Mexikó - Dél-Korea",
+    "Svájc - Bosznia-Hercegovina", "Kanada - Katar",
+    "Skócia - Marokkó", "Brazília - Haiti",
+    "Törökország - Paraguay", "USA - Ausztrália",
+    "Ecuador - Curaçao", "Németország - Elefántcsontpart",
+    "Tunézia - Japán", "Hollandia - Svédország",
+    "Új-Zéland - Egyiptom", "Belgium - Irán",
+    "Uruguay - Zöld-foki-szigetek", "Spanyolország - Szaúd-Arábia",
+    "Norvégia - Szenegál", "Franciaország - Irak",
+    "Jordánia - Algéria", "Argentína - Ausztria",
+    "Kolumbia - Kongói DK", "Portugália - Üzbegisztán",
+    "Horvátország - Panama", "Ghána - Anglia",
+
     # 3. Forduló
-    "Mexikó - Bih", "Dél-afrika - Kanada", "Dél-korea - Paraguay", "Csehország - USA",
-    "Katar - Marokkó", "Svájc - Brazil", "Anglia - Ghana", "Ausztrália - Németország",
-    "Spanyolország - Japán", "Kolumbia - Franciaország", "Argentína - Irán", "Nigéria - Olaszország",
-    "Egyiptom - Görögország", "Alizéria - Honduras", "Chile - Szlovákia", "Kamerun - Új-zéland",
-    "Elefántcsontpart - Észak-korea", "Dánia - Portugália", "Ukrajna - Ausztria", "Kína - Hollandia",
-    "Szerbia - Algéria", "Uruguay - Paraguay", "Oroszország - Peru", "Szaúd-arábia - Svédország"
+    "Csehország - Mexikó", "Dél-Afrika - Dél-Korea",
+    "Svájc - Kanada", "Bosznia-Hercegovina - Katar",
+    "Skócia - Brazília", "Marokkó - Haiti",
+    "Törökország - USA", "Paraguay - Ausztrália",
+    "Ecuador - Németország", "Curaçao - Elefántcsontpart",
+    "Tunézia - Hollandia", "Japán - Svédország",
+    "Új-Zéland - Belgium", "Egyiptom - Irán",
+    "Uruguay - Spanyolország", "Zöld-foki-szigetek - Szaúd-Arábia",
+    "Norvégia - Franciaország", "Szenegál - Irak",
+    "Jordánia - Argentína", "Algéria - Ausztria",
+    "Kolumbia - Portugália", "Kongói DK - Üzbegisztán",
+    "Horvátország - Ghána", "Panama - Anglia"
 ]
+
 
 def load_data():
     if os.path.exists(DB_FILE):
