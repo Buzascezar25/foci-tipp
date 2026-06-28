@@ -165,16 +165,16 @@ aktualis_bracket = get_aktualis_bracket()
 # 3. FELHASZNÁLÓI FELÜLET (ROUTER FIX)
 # ==========================================
 st.set_page_config(page_title="Foci Tippjáték", layout="wide")
-st.title("🏆 Közös Foci Tippjáték")
+st.title(" Közös Foci Tippjáték <3")
 
 # Szigorúan tiszta szöveges menü az összeomlások elkerülésére
 menu = st.sidebar.radio("Navigáció", ["Ranglista és Meccsek", "Tippek leadása", "Admin Panel"])
 
 # --- 1. MENÜPONT: RANGLISTA ÉS MECCSEK ---
 if menu == "Ranglista és Meccsek":
-    st.header("📊 Aktuális Ranglista")
+    st.header(" Aktuális Ranglista")
     
-    tab1, tab2 = st.tabs(["🏟️ Csoportkör", "🏆 Egyenes Kieséses Szakasz"])
+    tab1, tab2 = st.tabs([" Csoportkör", " Egyenes Kieséses Szakasz"])
     
     osszes_pont = {j: 0 for j in jatekosok}
     telitalalatok = {j: 0 for j in jatekosok}
