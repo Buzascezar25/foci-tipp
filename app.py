@@ -71,7 +71,7 @@ KO_ALAP_STRUKTURA = {
     "R32_11": {"nev": "Legjobb 32 - 11. meccs", "hazai": "Mexikó ", "vendeg": "Ecuador ", "next": "R16_6", "next_pos": "hazai"},
     "R32_12": {"nev": "Legjobb 32 - 12. meccs", "hazai": "Anglia ", "vendeg": "Kongói ", "next": "R16_6", "next_pos": "vendeg"},
     "R32_13": {"nev": "Legjobb 32 - 13. meccs", "hazai": "Argentína ", "vendeg": "Zöld-foki-szigetek ", "next": "R16_7", "next_pos": "hazai"},
-    "R32_14": {"nev": "Legjobb 32 - 14. meccs", "hazai": "Ausztrália 🇦🇺", "vendeg": "Egyiptom ", "next": "R16_7", "next_pos": "vendeg"},
+    "R32_14": {"nev": "Legjobb 32 - 14. meccs", "hazai": "Ausztrália", "vendeg": "Egyiptom ", "next": "R16_7", "next_pos": "vendeg"},
     "R32_15": {"nev": "Legjobb 32 - 15. meccs", "hazai": "Svájc ", "vendeg": "Algéria ", "next": "R16_8", "next_pos": "hazai"},
     "R32_16": {"nev": "Legjobb 32 - 16. meccs", "hazai": "Kolumbia ", "vendeg": "Ghána ", "next": "R16_8", "next_pos": "vendeg"},
     
