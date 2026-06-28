@@ -266,6 +266,7 @@ elif menu == "🔮 Tippek leadása":
             if st.button("Csoportkör Tippek mentése ", type="primary"):
                 if valasztott_jatekos not in data["tippek"]: data["tippek"][valasztott_jatekos] = {}
                 for m_id in aktiv_meccsek.keys():
+                    # ITT VOLT A HIBA, EZRE CSERÉLD KI:
                     h_ertek = st.session_state.get(f"t_h_{valasztott_jatekos}_{m_id}", 0)
                     v_ertek = st.session_state.get(f"t_v_{valasztott_jatekos}_{m_id}", 0)
                     data["tippek"][valasztott_jatekos][m_id] = [h_ertek, v_ertek]
@@ -289,7 +290,7 @@ elif menu == "🔮 Tippek leadása":
         if not ko_aktiv:
             st.success("Jelenleg nincs tippelhető kieséses mérkőzés.")
         else:
-            st.info("💡 A kieséses szakaszban **+1 pont jár**, ha a pontos végeredménytől függetlenül külön eltalálod a továbbjutó csapatot is!")
+            st.info(" A kieséses szakaszban **+1 pont jár**, ha a pontos végeredménytől függetlenül külön eltalálod a továbbjutó csapatot is!")
             
             if st.button("Kieséses Tippek mentése ", type="primary"):
                 if "ko_tippek" not in data: data["ko_tippek"] = {}
