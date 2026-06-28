@@ -91,14 +91,13 @@ st.title("Tippelde Fars Fcnek <3")
 menu = st.sidebar.radio("Navigáció", ["Ranglista és Meccsek", "Tippek leadása", "Admin Panel"])
 
 # 1. RANGLISTA ÉS MECCSEK MEGJELENÍTÉSE
-if menu == "📊 Ranglista és Meccsek":
+if menu == "Ranglista és Meccsek":
     st.header("Aktuális Állás")
     
     if not data["meccsek"]:
         st.info("Nincsenek meccsek a rendszerben.")
     else:
         osszes_pont = {j: 0 for j in jatekosok}
-        telitalalatok = {j: 0 for j in jatekosok} # ÚJ: Telitalálat számláló
         meccs_tablazat = []
         
         for m_id, m_adat in data["meccsek"].items():
@@ -112,11 +111,6 @@ if menu == "📊 Ranglista és Meccsek":
                 if tipp:
                     pont = pont_szamit(v_h, v_v, tipp[0], tipp[1])
                     osszes_pont[j] += pont
-                    
-                    # Ha pontos a tipp, növeljük a telitalálat számlálót
-                    if pont == 3:
-                        telitalalatok[j] += 1
-                        
                     sor[f"{j} tipp"] = f"{tipp[0]}-{tipp[1]}"
                     sor[f"{j} pont"] = pont
                 else:
@@ -125,19 +119,12 @@ if menu == "📊 Ranglista és Meccsek":
             
             meccs_tablazat.append(sor)
             
-        # A ranglista adatainak összeállítása
-        ranglista_adatok = [
-            {"Játékos": j, "Összes pont": osszes_pont[j], "Telitalálatok (3p)": telitalalatok[j]}
-            for j in jatekosok
-        ]
-        
-        # Rendezés elsődlegesen pont, másodlagosan telitalálatok alapján csökkenő sorrendben
-        ranglista_df = pd.DataFrame(ranglista_adatok).sort_values(by=["Összes pont", "Telitalálatok (3p)"], ascending=[False, False])
+        ranglista_df = pd.DataFrame(list(osszes_pont.items()), columns=["Játékos", "Összes pont"]).sort_values(by="Összes pont", ascending=False)
         st.dataframe(ranglista_df, use_container_width=True, hide_index=True)
         
         st.header("Meccsek részletesen")
         st.dataframe(pd.DataFrame(meccs_tablazat), use_container_width=True, hide_index=True)
-        
+
 # 2. TIPPEK LEADÁSA (GOMB A TETEJÉN - JAVÍTOTT, JÁTÉKOSONKÉNTI MEZŐKKEL)
 elif menu == "Tippek leadása":
     st.header("Tippek rögzítése")
