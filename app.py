@@ -136,7 +136,8 @@ if menu == "📊 Ranglista és Meccsek":
         st.dataframe(ranglista_df, use_container_width=True, hide_index=True)
         
         st.header("Meccsek részletesen")
-
+        st.dataframe(pd.DataFrame(meccs_tablazat), use_container_width=True, hide_index=True)
+        
 # 2. TIPPEK LEADÁSA (GOMB A TETEJÉN - JAVÍTOTT, JÁTÉKOSONKÉNTI MEZŐKKEL)
 elif menu == "Tippek leadása":
     st.header("Tippek rögzítése")
