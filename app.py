@@ -58,22 +58,22 @@ ALAP_MECCSEK = [
 # A kieséses szakasz logikai ágrajza a beküldött képek alapján
 KO_ALAP_STRUKTURA = {
     # Legjobb 32 (Round of 32)
-    "R32_1": {"nev": "Legjobb 32 - 1. meccs", "hazai": "Németország 🇩🇪", "vendeg": "Paraguay 🇵🇾", "next": "R16_1", "next_pos": "hazai"},
-    "R32_2": {"nev": "Legjobb 32 - 2. meccs", "hazai": "Franciaország 🇫🇷", "vendeg": "Svédország 🇸🇪", "next": "R16_1", "next_pos": "vendeg"},
-    "R32_3": {"nev": "Legjobb 32 - 3. meccs", "hazai": "Dél-Afrika 🇿🇦", "vendeg": "Kanada 🇨🇦", "next": "R16_2", "next_pos": "hazai"},
-    "R32_4": {"nev": "Legjobb 32 - 4. meccs", "hazai": "Hollandia 🇳🇱", "vendeg": "Marokkó 🇲🇦", "next": "R16_2", "next_pos": "vendeg"},
-    "R32_5": {"nev": "Legjobb 32 - 5. meccs", "hazai": "Portugália 🇵🇹", "vendeg": "Horvátország 🇭🇷", "next": "R16_3", "next_pos": "hazai"},
-    "R32_6": {"nev": "Legjobb 32 - 6. meccs", "hazai": "Spanyolország 🇪🇸", "vendeg": "Ausztria 🇦🇹", "next": "R16_3", "next_pos": "vendeg"},
-    "R32_7": {"nev": "Legjobb 32 - 7. meccs", "hazai": "USA 🇺🇸", "vendeg": "Bosznia-Hercegovina 🇧🇦", "next": "R16_4", "next_pos": "hazai"},
-    "R32_8": {"nev": "Legjobb 32 - 8. meccs", "hazai": "Belgium 🇧🇪", "vendeg": "Szenegál 🇸🇳", "next": "R16_4", "next_pos": "vendeg"},
-    "R32_9": {"nev": "Legjobb 32 - 9. meccs", "hazai": "Brazília 🇧🇷", "vendeg": "Japán 🇯🇵", "next": "R16_5", "next_pos": "hazai"},
-    "R32_10": {"nev": "Legjobb 32 - 10. meccs", "hazai": "Elefántcsontpart 🇨🇮", "vendeg": "Norvégia 🇳🇴", "next": "R16_5", "next_pos": "vendeg"},
-    "R32_11": {"nev": "Legjobb 32 - 12. meccs", "hazai": "Mexikó 🇲🇽", "vendeg": "Ecuador 🇪🇨", "next": "R16_6", "next_pos": "hazai"},
-    "R32_12": {"nev": "Legjobb 32 - 11. meccs", "hazai": "Anglia 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "vendeg": "Kongói DK 🇨🇩", "next": "R16_6", "next_pos": "vendeg"},
-    "R32_13": {"nev": "Legjobb 32 - 13. meccs", "hazai": "Argentína 🇦🇷", "vendeg": "Zöld-foki-szigetek 🇨🇻", "next": "R16_7", "next_pos": "hazai"},
-    "R32_14": {"nev": "Legjobb 32 - 14. meccs", "hazai": "Ausztrália 🇦🇺", "vendeg": "Egyiptom 🇪🇬", "next": "R16_7", "next_pos": "vendeg"},
-    "R32_15": {"nev": "Legjobb 32 - 15. meccs", "hazai": "Svájc 🇨🇭", "vendeg": "Algéria 🇩🇿", "next": "R16_8", "next_pos": "hazai"},
-    "R32_16": {"nev": "Legjobb 32 - 16. meccs", "hazai": "Kolumbia 🇨🇴", "vendeg": "Ghána 🇬🇭", "next": "R16_8", "next_pos": "vendeg"},
+    "R32_1": {"nev": "Legjobb 32 - 1. meccs", "hazai": "Németország", "vendeg": "Paraguay ", "next": "R16_1", "next_pos": "hazai"},
+    "R32_2": {"nev": "Legjobb 32 - 2. meccs", "hazai": "Franciaország ", "vendeg": "Svédország ", "next": "R16_1", "next_pos": "vendeg"},
+    "R32_3": {"nev": "Legjobb 32 - 3. meccs", "hazai": "Dél-Afrika ", "vendeg": "Kanada ", "next": "R16_2", "next_pos": "hazai"},
+    "R32_4": {"nev": "Legjobb 32 - 4. meccs", "hazai": "Hollandia ", "vendeg": "Marokkó ", "next": "R16_2", "next_pos": "vendeg"},
+    "R32_5": {"nev": "Legjobb 32 - 5. meccs", "hazai": "Portugália ", "vendeg": "Horvátország ", "next": "R16_3", "next_pos": "hazai"},
+    "R32_6": {"nev": "Legjobb 32 - 6. meccs", "hazai": "Spanyolország ", "vendeg": "Ausztria ", "next": "R16_3", "next_pos": "vendeg"},
+    "R32_7": {"nev": "Legjobb 32 - 7. meccs", "hazai": "USA ", "vendeg": "Bosznia-Hercegovina ", "next": "R16_4", "next_pos": "hazai"},
+    "R32_8": {"nev": "Legjobb 32 - 8. meccs", "hazai": "Belgium ", "vendeg": "Szenegál ", "next": "R16_4", "next_pos": "vendeg"},
+    "R32_9": {"nev": "Legjobb 32 - 9. meccs", "hazai": "Brazília ", "vendeg": "Japán ", "next": "R16_5", "next_pos": "hazai"},
+    "R32_10": {"nev": "Legjobb 32 - 10. meccs", "hazai": "Elefántcsontpart ", "vendeg": "Norvégia ", "next": "R16_5", "next_pos": "vendeg"},
+    "R32_11": {"nev": "Legjobb 32 - 11. meccs", "hazai": "Mexikó ", "vendeg": "Ecuador ", "next": "R16_6", "next_pos": "hazai"},
+    "R32_12": {"nev": "Legjobb 32 - 12. meccs", "hazai": "Anglia ", "vendeg": "Kongói ", "next": "R16_6", "next_pos": "vendeg"},
+    "R32_13": {"nev": "Legjobb 32 - 13. meccs", "hazai": "Argentína ", "vendeg": "Zöld-foki-szigetek ", "next": "R16_7", "next_pos": "hazai"},
+    "R32_14": {"nev": "Legjobb 32 - 14. meccs", "hazai": "Ausztrália 🇦🇺", "vendeg": "Egyiptom ", "next": "R16_7", "next_pos": "vendeg"},
+    "R32_15": {"nev": "Legjobb 32 - 15. meccs", "hazai": "Svájc ", "vendeg": "Algéria ", "next": "R16_8", "next_pos": "hazai"},
+    "R32_16": {"nev": "Legjobb 32 - 16. meccs", "hazai": "Kolumbia ", "vendeg": "Ghána ", "next": "R16_8", "next_pos": "vendeg"},
     
     # Nyolcaddöntő (Round of 16)
     "R16_1": {"nev": "Nyolcaddöntő 1", "hazai": "TBD", "vendeg": "TBD", "next": "QF_1", "next_pos": "hazai"},
@@ -253,17 +253,17 @@ if menu == "Ranglista és Meccsek":
 
 # --- 2. MENÜPONT: TIPPEK LEADÁSA ---
 elif menu == "Tippek leadása":
-    st.header("🔮 Tippek rögzítése")
-    valasztott_jatekos = st.selectbox("Válaszd ki a neved:", jatekosok)
+    st.header(" Tippek rögzítése")
+    valasztott_jatekos = st.selectbox("Melyik Fars Fc tag vagy:", jatekosok)
     
-    tab1, tab2 = st.tabs(["🏟️ Csoportkör", "🏆 Egyenes Kieséses Szakasz"])
+    tab1, tab2 = st.tabs([" Csoportkör", " Egyenes Kieséses Szakasz"])
     
     with tab1:
         aktiv_meccsek = {m_id: m_adat for m_id, m_adat in data["meccsek"].items() if m_adat["valos_hazai"] is None}
         if not aktiv_meccsek:
             st.success("Jelenleg nincs tippelhető csoportmeccs.")
         else:
-            if st.button("Csoportkör Tippek mentése 💾", type="primary"):
+            if st.button("Csoportkör Tippek mentése ", type="primary"):
                 if valasztott_jatekos not in data["tippek"]: data["tippek"][valasztott_jatekos] = {}
                 for m_id in aktiv_meccsek.keys():
                     h_ertek = st.session_state.get(f"t_h_{valasztott_jatekos}_{m_id}", 0)
@@ -287,8 +287,8 @@ elif menu == "Tippek leadása":
         if not ko_aktiv:
             st.success("Jelenleg nincs tippelhető kieséses mérkőzés.")
         else:
-            st.info("💡 A kieséses szakaszban +1 pont jár, ha eltalálod a továbbjutó csapatot is!")
-            if st.button("Kieséses Tippek mentése 💾", type="primary"):
+            st.info(" A kieséses szakaszban +1 pont jár, ha eltalálod a továbbjutó csapatot is!")
+            if st.button("Kieséses Tippek mentése ", type="primary"):
                 if "ko_tippek" not in data: data["ko_tippek"] = {}
                 if valasztott_jatekos not in data["ko_tippek"]: data["ko_tippek"][valasztott_jatekos] = {}
                 
@@ -316,9 +316,9 @@ elif menu == "Tippek leadása":
 
 # --- 3. MENÜPONT: ADMIN PANEL ---
 elif menu == "Admin Panel":
-    st.header("🛠️ Adminisztrációs felület")
+    st.header(" Adminisztrációs felület")
     
-    tab1, tab2 = st.tabs(["🏟️ Csoportkör Eredmények", "🏆 Egyenes Kiesés Eredmények"])
+    tab1, tab2 = st.tabs(["Csoportkör Eredmények", " Egyenes Kiesés Eredmények"])
     
     with tab1:
         st.subheader("Csoportkör Meccsek lezárása")
@@ -390,7 +390,7 @@ elif menu == "Admin Panel":
     # ==========================================
     # BIZTONSÁGI MENTÉS ÉS VISSZAÁLLÍTÁS
     # ==========================================
-    st.header("💾 Biztonsági mentés (Adatbázis kezelése)")
+    st.header(" Biztonsági mentés (Adatbázis kezelése)")
     col_export, col_import = st.columns(2)
     with col_export:
         st.subheader("Adatok letöltése")
