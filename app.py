@@ -165,7 +165,7 @@ aktualis_bracket = get_aktualis_bracket()
 # 3. FELHASZNÁLÓI FELÜLET (ROUTER FIX)
 # ==========================================
 st.set_page_config(page_title="Foci Tippjáték", layout="wide")
-st.title(" Közös Foci Tippjáték <3")
+st.title("Tippelde Fars Fcnek <3")
 
 # Szigorúan tiszta szöveges menü az összeomlások elkerülésére
 menu = st.sidebar.radio("Navigáció", ["Ranglista és Meccsek", "Tippek leadása", "Admin Panel"])
